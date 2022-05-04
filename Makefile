@@ -4,14 +4,15 @@
 #
 
 # config
-#port = /dev/ttyUSB0 
-port = $(shell echo $(PORT))
+port = /dev/ttyUSB0 
+#port = $(shell echo $(PORT))
 
 # command
 MAKE    = make
 MRBC    = mrbc
 ESPTOOL = esptool.py
 MKSPIFFS= mkspiffs
+MONITOR = ~/esp/esp-idf/tools/idf_monitor.py
 RM      = rm
 
 # files
@@ -26,6 +27,9 @@ SPIFFS_DATA_OFFSET=$(shell awk '/spiffs/ {print $$0}' partitions.csv| cut -d , -
 SPIFFS_DATA_TABLE_SIZE=$(shell awk '/spiffs/ {print $$0}' partitions.csv| cut -d , -f 5)
 
 all: single
+
+monitor: 
+	$(MONITOR) --port $(port) --baud 115900 ./iotex-esp32-mrubyc.elf
 
 clean:
 ifeq ("$(mrbc_exist_bin)","./spiffs/mrbc.spiffs.bin")
